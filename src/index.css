@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0B0B0D;
+  --color-surface: #141414;
+  --color-primary: #D4AF37;
+  --color-accent: #C8860A;
+  --color-text: #F5F0E8;
+  --color-muted: #888880;
+  --color-border: #2A2A2A;
+  --color-cta-bg: #D4AF37;
+  --color-cta-text: #0B0B0D;
+  --overlay-opacity: 0.65;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "DM Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background-color: var(--color-cta-bg);
+  color: var(--color-cta-text);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.85rem 2rem;
+  border-radius: 2px;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+}
+
+.btn-outline {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.75rem 2rem;
+  border-radius: 2px;
+  background: transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+  line-height: 1.2;
+}
+
+p, li, span {
+  line-height: 1.5;
+}
+
+/* EventHighlights Pill Hover Animation */
+.highlight-pill {
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.highlight-pill:hover {
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .highlight-pill {
+    transition: none;
+  }
+
+  .highlight-pill:hover {
+    transform: none;
+  }
+}

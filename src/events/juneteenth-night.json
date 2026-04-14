@@ -1,0 +1,65 @@
+{
+  "slug": "juneteenth-night",
+  "title": "Juneteenth Night",
+  "subtitle": "Celebrate Freedom in Style",
+  "date": "Friday, June 20th, 2025",
+  "isoDate": "2025-06-20T21:00:00",
+  "doorsOpen": "9:00 PM",
+  "startTime": "9:00 PM",
+  "endTime": "Until",
+  "location": "The Brass Elephant Lounge & Grill",
+  "address": "Vance, SC",
+  "ageRequirement": "21+",
+  "dresscode": "All Black Attire Encouraged",
+  "description": "Honor the culture. Celebrate freedom. One night, one room, one vibe.",
+  "mode": "single",
+  "themePreset": "brass-luxe",
+  "heroImage": "/media/juneteenth-hero.jpg",
+  "heroVideo": "",
+  "flyerImage": "/media/juneteenth-flyer.jpg",
+  "gallery": [],
+  "recapVideo": "",
+  "highlights": [
+    { "icon": "DJ", "label": "Live DJ" },
+    { "icon": "BLACK", "label": "All Black Attire" },
+    { "icon": "VIP", "label": "VIP Sections" },
+    { "icon": "MUSIC", "label": "Hip Hop + R&B" },
+    { "icon": "BAR", "label": "Bottle Service" },
+    { "icon": "30+", "label": "Mature Crowd 30+" }
+  ],
+  "schedule": [
+    {
+      "name": "Night Party",
+      "time": "9PM - Until",
+      "description": "Full DJ set. Full capacity. Full energy."
+    }
+  ],
+  "faq": [
+    { "question": "What is the age requirement?", "answer": "21+ with valid ID." },
+    {
+      "question": "Is all black attire required?",
+      "answer": "All black is strongly encouraged. Upscale dress code still applies."
+    },
+    { "question": "Is there parking?", "answer": "Free on-site parking available." },
+    { "question": "What time do doors open?", "answer": "Doors open at 9PM." },
+    {
+      "question": "How do I get VIP?",
+      "answer": "Submit the VIP inquiry form or DM us on Instagram."
+    }
+  ],
+  "cta": {
+    "primary": "RSVP Now",
+    "primaryLink": "#rsvp",
+    "secondary": "Reserve VIP",
+    "secondaryLink": "#rsvp"
+  },
+  "showCountdown": true,
+  "showRSVP": true,
+  "showTickets": false,
+  "showVIP": true,
+  "showGallery": false,
+  "showRecap": false,
+  "seoTitle": "Juneteenth Night | The Brass Elephant",
+  "seoDescription": "Celebrate Juneteenth in style at The Brass Elephant Lounge & Grill in Vance, SC. 21+. RSVP now.",
+  "ogImage": "/media/juneteenth-flyer.jpg"
+}
