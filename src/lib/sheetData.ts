@@ -1,26 +1,84 @@
 import { parseCSV } from "./parseCSV";
 import type { EventConfig, ThemePreset, EventMode } from "../types/event";
 
-const SHEET_ID = import.meta.env.VITE_SHEET_ID;
+let sheetIdPromise: Promise<string> | null = null;
 
-function csvUrl(tab: string): string {
-  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${tab}`;
+function csvUrl(sheetId: string, tab: string): string {
+  return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${tab}`;
+}
+
+function asNonEmptyString(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value.trim();
+}
+
+async function resolveSheetId(): Promise<string> {
+  const sheetIdFromBuild = asNonEmptyString(import.meta.env.VITE_SHEET_ID);
+  if (sheetIdFromBuild) return sheetIdFromBuild;
+
+  if (!sheetIdPromise) {
+    sheetIdPromise = fetch("/.netlify/functions/sheet-config")
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Sheet config request failed: ${res.status}`);
+        }
+
+        const data = (await res.json()) as { sheetId?: string };
+        const sheetId = asNonEmptyString(data.sheetId);
+        if (!sheetId) {
+          throw new Error("Missing sheet ID from runtime config");
+        }
+
+        return sheetId;
+      })
+      .catch((error) => {
+        sheetIdPromise = null;
+        throw error;
+      });
+  }
+
+  return sheetIdPromise;
 }
 
 async function fetchTab(tab: string): Promise<Record<string, string>[]> {
-  const res = await fetch(csvUrl(tab));
-  if (!res.ok) throw new Error(`Failed to fetch sheet tab: ${tab}`);
-  const text = await res.text();
-  return parseCSV(text);
+  const sheetId = await resolveSheetId();
+  const url = csvUrl(sheetId, tab);
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch sheet tab "${tab}" (${res.status}): ${url}`);
+  }
+
+  return parseCSV(await res.text());
 }
 
 function bool(val: string): boolean {
-  return val?.trim().toUpperCase() === "TRUE";
+  const normalized = val?.trim().toUpperCase();
+  return normalized === "TRUE" || normalized === "1" || normalized === "YES";
 }
 
 function num(val: string, fallback: number): number {
   const n = parseFloat(val);
   return isNaN(n) ? fallback : n;
+}
+
+function normalizeMediaType(value: string | undefined): "image" | "video" | "" {
+  const normalized = value?.trim().toLowerCase();
+  if (normalized === "image") return "image";
+  if (normalized === "video") return "video";
+  return "";
+}
+
+function parseMediaUrl(value: string | undefined): string {
+  const raw = value?.trim() ?? "";
+  if (!raw) return "";
+
+  try {
+    new URL(raw);
+    return raw;
+  } catch {
+    return "";
+  }
 }
 
 function assembleEvent(
@@ -41,6 +99,10 @@ function assembleEvent(
   const faq = faqRows
     .filter((r) => r.slug === slug)
     .sort((a, b) => num(a.sortOrder, 0) - num(b.sortOrder, 0));
+  const mediaType = normalizeMediaType(hero?.bg_type);
+  const heroMedia = parseMediaUrl(hero?.media_url);
+  const heroImage = mediaType === "image" ? heroMedia : "";
+  const heroVideo = mediaType === "video" ? heroMedia : "";
 
   return {
     slug,
@@ -58,8 +120,8 @@ function assembleEvent(
     description: eventRow.description ?? "",
     mode: (eventRow.mode as EventMode) ?? "single",
     themePreset: (eventRow.themePreset as ThemePreset) ?? "brass-luxe",
-    heroImage: hero?.bg_type === "image" ? (hero.media_url ?? "") : "",
-    heroVideo: hero?.bg_type === "video" ? (hero.media_url ?? "") : "",
+    heroImage,
+    heroVideo,
     overlayOpacity: hero ? num(hero.overlayOpacity, 0.65) : 0.65,
     flyerImage: eventRow.flyerImage || eventRow.ogImage || "",
     gallery: [],

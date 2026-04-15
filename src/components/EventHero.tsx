@@ -6,6 +6,22 @@ interface EventHeroProps {
   event: EventConfig;
 }
 
+function parseEventDate(value: string): Date | null {
+  const raw = value?.trim();
+  if (!raw) return null;
+
+  const direct = new Date(raw);
+  if (!Number.isNaN(direct.getTime())) return direct;
+
+  const normalized =
+    raw.includes(" ") && !raw.includes("T") ? raw.replace(" ", "T") : raw;
+  const hasTimezone = /(?:Z|[+-]\d{2}:\d{2})$/i.test(normalized);
+  const withTimezone = hasTimezone ? normalized : `${normalized}Z`;
+  const parsed = new Date(withTimezone);
+
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
 export default function EventHero({ event }: EventHeroProps) {
   const [timeRemaining, setTimeRemaining] = useState<{
     days: number;
@@ -16,11 +32,16 @@ export default function EventHero({ event }: EventHeroProps) {
 
   useEffect(() => {
     if (!event.showCountdown) return;
+    const parsedEventDate = parseEventDate(event.isoDate);
+
+    if (!parsedEventDate) {
+      setTimeRemaining(null);
+      return;
+    }
 
     const calculateTimeRemaining = () => {
-      const eventDate = new Date(event.isoDate);
       const now = new Date();
-      const difference = eventDate.getTime() - now.getTime();
+      const difference = parsedEventDate.getTime() - now.getTime();
 
       if (difference <= 0) {
         setTimeRemaining({ days: 0, hours: 0, minutes: 0, seconds: 0 });
