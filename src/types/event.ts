@@ -51,6 +51,7 @@ export interface EventConfig {
   themePreset: ThemePreset;
   heroImage: string;
   heroVideo?: string;
+  overlayOpacity?: number;
   flyerImage?: string;
   gallery: GalleryItem[];
   recapVideo?: string;

@@ -92,7 +92,7 @@ export default function EventHero({ event }: EventHeroProps) {
       <div
         className="absolute inset-0"
         style={{
-          backgroundColor: `rgba(0, 0, 0, var(--overlay-opacity))`,
+          backgroundColor: `rgba(0, 0, 0, ${event.overlayOpacity ?? 0.65})`,
         }}
       />
 

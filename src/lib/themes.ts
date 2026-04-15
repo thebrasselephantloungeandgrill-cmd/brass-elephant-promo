@@ -1,14 +1,14 @@
 export const themes: Record<string, Record<string, string>> = {
   "brass-luxe": {
-    "--color-bg": "#0B0B0D",
-    "--color-surface": "#141414",
-    "--color-primary": "#D4AF37",
-    "--color-accent": "#C8860A",
-    "--color-text": "#F5F0E8",
-    "--color-muted": "#888880",
-    "--color-border": "#2A2A2A",
-    "--color-cta-bg": "#D4AF37",
-    "--color-cta-text": "#0B0B0D",
+    "--color-bg": "#0C0B0A",
+    "--color-surface": "#181614",
+    "--color-primary": "#C9A44A",
+    "--color-accent": "#C41230",
+    "--color-text": "#F2E8D0",
+    "--color-muted": "#7A7060",
+    "--color-border": "#302C24",
+    "--color-cta-bg": "#C41230",
+    "--color-cta-text": "#F2E8D0",
     "--overlay-opacity": "0.65",
   },
   "day-party-summer": {

@@ -1,11 +1,22 @@
-import { getAllEvents } from "../lib/getEvent";
+import { useAllEvents } from "../hooks/useAllEvents";
 import { Link } from "react-router-dom";
 
 export default function EventsIndex() {
-  const events = getAllEvents();
+  const { events, loading } = useAllEvents();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "var(--color-bg)" }}>
+        <div
+          className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin"
+          style={{ borderColor: "var(--color-primary)", borderTopColor: "transparent" }}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen py-20 px-4">
+    <div className="min-h-screen py-20 px-4" style={{ backgroundColor: "var(--color-bg)" }}>
       <div className="max-w-4xl mx-auto">
         <h1 className="text-5xl font-bold mb-4 text-center">The Brass Elephant</h1>
         <p className="text-xl mb-12 text-center" style={{ color: "var(--color-muted)" }}>

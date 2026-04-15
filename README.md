@@ -32,8 +32,14 @@ npm run lint
 
 Copy `.env.example` to `.env` and set:
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+- `VITE_SHEET_ID`
+- `RSVP_WEBHOOK_URL`
+
+For Netlify:
+
+- Add `VITE_SHEET_ID` in Site configuration > Environment variables.
+- Add `RSVP_WEBHOOK_URL` in Site configuration > Environment variables.
+- Do not expose the Zapier webhook as a `VITE_*` variable. The frontend now posts to the Netlify Function at `/.netlify/functions/rsvp`, which forwards the request server-side.
 
 ## Current Priorities
 

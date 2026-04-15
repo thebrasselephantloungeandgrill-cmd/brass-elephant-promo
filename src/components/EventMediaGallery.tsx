@@ -10,6 +10,10 @@ export default function EventMediaGallery({ event }: EventMediaGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState("");
 
+  if (!event.flyerImage && !event.recapVideo && event.gallery.length === 0) {
+    return null;
+  }
+
   const openLightbox = (src: string) => {
     setLightboxImage(src);
     setLightboxOpen(true);

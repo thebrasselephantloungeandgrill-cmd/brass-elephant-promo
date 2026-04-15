@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getEventBySlug } from "../lib/getEvent";
+import { useEventData } from "../hooks/useEventData";
 import { applyTheme } from "../lib/themes";
 import { useEffect } from "react";
 
@@ -15,20 +15,40 @@ import EventFooter from "../components/EventFooter";
 
 export default function EventPage() {
   const { slug } = useParams();
-  const event = getEventBySlug(slug ?? "");
+  const { event, loading, error } = useEventData(slug ?? "");
 
   useEffect(() => {
     if (event) applyTheme(event.themePreset);
   }, [event]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "var(--color-bg)" }}>
+        <div className="text-center">
+          <div
+            className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin mx-auto mb-4"
+            style={{ borderColor: "var(--color-primary)", borderTopColor: "transparent" }}
+          />
+          <p style={{ color: "var(--color-muted)" }}>Loading event...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p style={{ color: "var(--color-muted)" }}>{error}</p>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Event not found</h1>
-          <p className="text-lg" style={{ color: "var(--color-muted)" }}>
-            The event you're looking for doesn't exist.
-          </p>
+          <p style={{ color: "var(--color-muted)" }}>The event you're looking for doesn't exist.</p>
         </div>
       </div>
     );
