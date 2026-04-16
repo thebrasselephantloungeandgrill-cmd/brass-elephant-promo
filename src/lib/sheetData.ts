@@ -2,6 +2,19 @@ import { parseCSV } from "./parseCSV";
 import type { EventConfig, ThemePreset, EventMode } from "../types/event";
 
 let sheetIdPromise: Promise<string> | null = null;
+const MEMORIAL_DAY_HERO_VIDEO =
+  "https://res.cloudinary.com/dtbjdxsv6/video/upload/v1776200376/ElevenLabs_Memorial_Day_23_2026_Day_and_Night_party_runvig.mp4";
+const MEMORIAL_DAY_EVENT_OVERRIDES: Partial<EventConfig> = {
+  date: "May 23, 2026",
+  isoDate: "2026-05-23T21:00:00-04:00",
+  doorsOpen: "9:00 PM",
+  startTime: "10:00 PM",
+  endTime: "2:00 AM",
+  heroImage: "",
+  heroVideo: MEMORIAL_DAY_HERO_VIDEO,
+  overlayOpacity: 0.65,
+  showCountdown: true,
+};
 
 function csvUrl(sheetId: string, tab: string): string {
   return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${tab}`;
@@ -104,7 +117,7 @@ function assembleEvent(
   const heroImage = mediaType === "image" ? heroMedia : "";
   const heroVideo = mediaType === "video" ? heroMedia : "";
 
-  return {
+  const event: EventConfig = {
     slug,
     title: eventRow.title ?? "",
     subtitle: eventRow.subtitle ?? "",
@@ -149,6 +162,15 @@ function assembleEvent(
     seoDescription: eventRow.seoDescription ?? "",
     ogImage: eventRow.ogImage ?? "",
   };
+
+  if (slug === "memorial-day-kickoff") {
+    return {
+      ...event,
+      ...MEMORIAL_DAY_EVENT_OVERRIDES,
+    };
+  }
+
+  return event;
 }
 
 interface AllSheetData {
