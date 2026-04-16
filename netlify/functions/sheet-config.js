@@ -11,7 +11,7 @@ function json(statusCode, body) {
   };
 }
 
-export default async function handler(event) {
+export async function handler(event) {
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 204,
