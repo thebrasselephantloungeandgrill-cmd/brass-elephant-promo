@@ -4,7 +4,6 @@ import type { EventConfig, ThemePreset, EventMode } from "../types/event";
 let sheetIdPromise: Promise<string> | null = null;
 const MEMORIAL_DAY_HERO_VIDEO =
   "https://res.cloudinary.com/dtbjdxsv6/video/upload/v1776200376/ElevenLabs_Memorial_Day_23_2026_Day_and_Night_party_runvig.mp4";
-const MEMORIAL_DAY_FLYER_FALLBACK = "/media/memorial-day-flyer.jpg";
 const MEMORIAL_DAY_EVENT_OVERRIDES: Partial<EventConfig> = {
   date: "May 23, 2026",
   isoDate: "2026-05-23T21:00:00-04:00",
@@ -13,7 +12,6 @@ const MEMORIAL_DAY_EVENT_OVERRIDES: Partial<EventConfig> = {
   endTime: "2:00 AM",
   heroImage: "",
   heroVideo: MEMORIAL_DAY_HERO_VIDEO,
-  flyerImage: MEMORIAL_DAY_FLYER_FALLBACK,
   overlayOpacity: 0.65,
   showCountdown: true,
   showGallery: true,
