@@ -1,5 +1,6 @@
 import { EventConfig } from "../types/event";
 import { Instagram, Facebook, Phone } from "lucide-react";
+import { useSettings } from "../hooks/useSettings";
 
 interface EventFooterProps {
   event: EventConfig;
@@ -7,6 +8,11 @@ interface EventFooterProps {
 
 export default function EventFooter({ event }: EventFooterProps) {
   const currentYear = new Date().getFullYear();
+  const { settings } = useSettings();
+  const phoneNumber = settings.phone?.trim() ?? "";
+  const instagramUrl = normalizeUrl(settings.instagram);
+  const facebookUrl = normalizeUrl(settings.facebook);
+  const phoneHref = phoneNumber ? `tel:${phoneNumber.replace(/[^\d+]/g, "")}` : "";
 
   return (
     <footer
@@ -37,15 +43,19 @@ export default function EventFooter({ event }: EventFooterProps) {
               Venue
             </p>
             <h3 className="text-xl font-bold mb-4">
-              The Brass Elephant Lounge & Grill
+              {event.location}
             </h3>
-            <p style={{ color: "var(--color-muted)" }}>Vance, SC</p>
-            <div className="flex items-center gap-2 mt-3">
-              <Phone size={18} style={{ color: "var(--color-primary)" }} />
-              <span style={{ color: "var(--color-muted)" }}>
-                Contact for reservations
-              </span>
-            </div>
+            <p style={{ color: "var(--color-muted)" }}>{event.address}</p>
+            {phoneNumber && (
+              <a
+                href={phoneHref}
+                className="mt-3 inline-flex items-center gap-2 transition-colors hover:opacity-80"
+                style={{ color: "var(--color-muted)" }}
+              >
+                <Phone size={18} style={{ color: "var(--color-primary)" }} />
+                <span>{phoneNumber}</span>
+              </a>
+            )}
           </div>
 
           <div
@@ -62,32 +72,46 @@ export default function EventFooter({ event }: EventFooterProps) {
               Social
             </p>
             <h3 className="text-xl font-bold mb-4">Connect With Us</h3>
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="p-3 rounded-full transition-colors hover:opacity-80"
-                style={{
-                  backgroundColor: "var(--color-surface)",
-                  color: "var(--color-primary)",
-                  border: "1px solid rgba(212, 175, 55, 0.18)",
-                }}
-                aria-label="Instagram"
-              >
-                <Instagram size={24} />
-              </a>
-              <a
-                href="#"
-                className="p-3 rounded-full transition-colors hover:opacity-80"
-                style={{
-                  backgroundColor: "var(--color-surface)",
-                  color: "var(--color-primary)",
-                  border: "1px solid rgba(212, 175, 55, 0.18)",
-                }}
-                aria-label="Facebook"
-              >
-                <Facebook size={24} />
-              </a>
-            </div>
+            {instagramUrl || facebookUrl ? (
+              <div className="flex gap-4">
+                {instagramUrl && (
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full transition-colors hover:opacity-80"
+                    style={{
+                      backgroundColor: "var(--color-surface)",
+                      color: "var(--color-primary)",
+                      border: "1px solid rgba(212, 175, 55, 0.18)",
+                    }}
+                    aria-label="Instagram"
+                  >
+                    <Instagram size={24} />
+                  </a>
+                )}
+                {facebookUrl && (
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full transition-colors hover:opacity-80"
+                    style={{
+                      backgroundColor: "var(--color-surface)",
+                      color: "var(--color-primary)",
+                      border: "1px solid rgba(212, 175, 55, 0.18)",
+                    }}
+                    aria-label="Facebook"
+                  >
+                    <Facebook size={24} />
+                  </a>
+                )}
+              </div>
+            ) : (
+              <p style={{ color: "var(--color-muted)" }}>
+                Social links coming soon
+              </p>
+            )}
           </div>
 
           <div
@@ -108,9 +132,14 @@ export default function EventFooter({ event }: EventFooterProps) {
             <p className="mb-2" style={{ color: "var(--color-text)" }}>
               Age: <span style={{ color: "var(--color-primary)" }}>{event.ageRequirement}</span>
             </p>
-            <p className="mb-2" style={{ color: "var(--color-muted)" }}>
-              Dress Code: {event.dresscode}
-            </p>
+            <div className="mb-2">
+              <p className="font-medium" style={{ color: "var(--color-text)" }}>
+                Dress Code
+              </p>
+              <p className="leading-relaxed break-words" style={{ color: "var(--color-muted)" }}>
+                {event.dresscode}
+              </p>
+            </div>
             <p style={{ color: "var(--color-muted)" }}>Valid ID Required</p>
           </div>
         </div>
@@ -129,4 +158,11 @@ export default function EventFooter({ event }: EventFooterProps) {
       </div>
     </footer>
   );
+}
+
+function normalizeUrl(value?: string): string {
+  const raw = value?.trim() ?? "";
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return `https://${raw}`;
 }
